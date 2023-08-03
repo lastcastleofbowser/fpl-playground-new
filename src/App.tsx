@@ -22,6 +22,11 @@ function App() {
       });
   }, []);
 
+  const getTeamName = (teamId: number): string => {
+    const team = teamData.find((team) => team.id === teamId);
+    return team ? team.name : 'Unknown Team';
+  };
+
   return (
     <div className="App">
       <table>
@@ -36,8 +41,8 @@ function App() {
         <tbody>
           {fixtureData.map((fixture) => (
             <tr>
-              <td>{fixture.team_h}</td>
-              <td>{fixture.team_a}</td>
+              <td>{getTeamName(fixture.team_h)}</td>
+              <td>{getTeamName(fixture.team_a)}</td>
               <td>{fixture.team_h_score}</td>
               <td>{fixture.team_a_score}</td>
             </tr>

@@ -16,26 +16,9 @@ function App() {
   const [fixtureData, setFixtureData] = useState<FixtureData[]>([]);
   
   const apiURL = 'http://localhost:3008/api/'; 
-  
-  // const fetchFixtures = () => {
-  //   axios
-  //     .get(`${apiURL}fixtures/`, { timeout: 5000 })
-  //     .then((response) => {
-  //       setFixtureData(response.data);
-  //       console.log('Fixture Data:', response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching fixture data', error);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   fetchFixtures();
-  // }, []);
-
 
   useEffect(() => {
-    fetchFixtures() // Use the fetchFixtures function to fetch the data
+    fetchFixtures() 
       .then((data) => {
         setFixtureData(data);
         console.log('Fixture Data:', data);

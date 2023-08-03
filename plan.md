@@ -9,4 +9,4 @@
         - Any GW squad -> https://fantasy.premierleague.com/api/entry/{team-id}/event/{GW}/picks/
         - Total career performance -> https://fantasy.premierleague.com/api/entry/{team-id}/history/
 
-3. Using TS define the type for all the datapoints 
+3. Take the team id and relate them to correct team for display purposes

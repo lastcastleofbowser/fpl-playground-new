@@ -1,19 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
-import { fetchFixtures, FixtureData } from './api'; // Import the fetchFixtures function from the api.ts file
-// import axios from 'axios';
+import { fetchFixtures, FixtureData, fetchTeams, TeamData } from './api'; // Import the fetchFixtures function from the api.ts file
 
-
-
-// interface FixtureData {
-//   team_h: number,
-//   team_a: number,
-//   team_h_score: number,
-//   team_a_score: number,
-// }
 
 function App() {
   const [fixtureData, setFixtureData] = useState<FixtureData[]>([]);
+  const [teamData, setTeamData] = useState<TeamData[]>([]);
   
   const apiURL = 'http://localhost:3008/api/'; 
 
@@ -23,11 +15,16 @@ function App() {
         setFixtureData(data);
         console.log('Fixture Data:', data);
       });
+      fetchTeams()
+      .then((data) => {
+        setTeamData(data);
+        console.log('Team Data:', data);
+      });
   }, []);
 
   return (
     <div className="App">
-      {/* <table>
+      <table>
         <thead>
           <tr>
             <th>Home Team</th>
@@ -38,7 +35,7 @@ function App() {
         </thead>
         <tbody>
           {fixtureData.map((fixture) => (
-            <tr key={fixture.id}>
+            <tr>
               <td>{fixture.team_h}</td>
               <td>{fixture.team_a}</td>
               <td>{fixture.team_h_score}</td>
@@ -46,7 +43,7 @@ function App() {
             </tr>
           ))}
         </tbody>
-      </table> */}
+      </table>
     </div>
   );
 }

@@ -1,6 +1,7 @@
-1. set up axios, cors, express and middleware to fetch api data
+1. set up axios, cors, express and middleware to fetch api data ✅
 
 2. fetch and store data from APIs
+    - essential game data data https://fantasy.premierleague.com/api/bootstrap-static/ ✅
     - fixture data https://fantasy.premierleague.com/api/fixtures/ ✅
     - player data  https://fantasy.premierleague.com/api/element-summary/{player-id}/
     - FPL manager data 

@@ -78,6 +78,7 @@ export const fetchFixtures = async () => {
       }
 
       return combinedFixtures;
+      
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;

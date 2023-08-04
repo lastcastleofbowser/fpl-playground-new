@@ -48,14 +48,51 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
           {/* Add more options here if needed */}
         </select>
       </div>
-
       <table>
+        <thead>
+          <tr>
+            <th>Team Name</th>
+            <th>Gameweek 1</th>
+            <th>Gameweek 2</th>
+            <th>Gameweek 3</th>
+            <th>Gameweek 4</th>
+            <th>Gameweek 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          {teamData.map((team) => (
+            <tr key={team.id}>
+              <td>{team.name}</td>
+              {Array.from({ length: 5 }).map((_, index) => {
+                const gameweek = index + 1;
+                const teamFixture = fixtureData.find(
+                  (fixture) => fixture.team_h === team.id && fixture.event === gameweek
+                );
+                const opponentFixture = fixtureData.find(
+                  (fixture) => fixture.team_a === team.id && fixture.event === gameweek
+                );
+                if (!teamFixture && !opponentFixture) {
+                  return <td key={gameweek}>BLANK</td>;
+                }
+                return (
+                  <td key={gameweek}>
+                    {teamFixture ? `${getTeamName(teamFixture.team_a)} (H)` : ''}
+                    {opponentFixture ? `${getTeamName(opponentFixture.team_h)} (A)` : ''}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+
+      {/* <table>
         <thead>
           <tr>
             <th>Home Team</th>
             <th>Away Team</th>
-            {/* <th>Home Team Score</th>
-            <th>Away Team Score</th> */}
+            <th>GW</th>
           </tr>
         </thead>
         <tbody>
@@ -63,12 +100,12 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
             <tr>
               <td>{getTeamName(fixture.team_h)}</td>
               <td>{getTeamName(fixture.team_a)}</td>
-              {/* <td>{fixture.team_h_score}</td>
-              <td>{fixture.team_a_score}</td> */}
+              <td>{fixture.event}</td>
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> */}
+
     </div>
   );
 }

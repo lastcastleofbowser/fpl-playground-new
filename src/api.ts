@@ -1,7 +1,8 @@
 import axios, { AxiosError } from 'axios';
 
 const apiURL = 'http://localhost:3008/api/';
-export const gameweekNum = 5; // Specific gameweek to fetch
+
+export const gameweekNum = 5; // Specific number of gameweek to fetch
 
 export interface FPLGameweekInfo {
   events: {
@@ -57,7 +58,7 @@ export const fetchFPLGameInfo = async () => {
   }
 };
 
-export const fetchFixtures = async () => {
+export const fetchFixtures = async (gameweekNum: number) => {
     try {
       const response = await axios.get(`${apiURL}fixtures/?future=${gameweekNum}`, { timeout: 5000 });
       const fixtures: FixtureData[] = response.data;
@@ -78,7 +79,7 @@ export const fetchFixtures = async () => {
       }
 
       return combinedFixtures;
-      
+
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;

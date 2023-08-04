@@ -1,5 +1,22 @@
-.App {
-  text-align: center;
+* { text-align: center; margin: 0.3rem }
+
+.fixture-table-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
+.fixture-table{
+  outline: 1px solid #ccc; 
+  border-collapse: collapse;
+}
 
+.fixture-table thead{
+  /* border-bottom: 10px solid #000; */
+}
+
+.fixture-table td{
+  border: 1px solid #ccc;
+  padding:5px;
+}

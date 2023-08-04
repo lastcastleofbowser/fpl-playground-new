@@ -5,9 +5,8 @@ import {  fetchFixtures,
           fetchTeams, 
           TeamData,
           gameweekNum
-         } from './api'; // Import the fetchFixtures function from the api.ts file
-
-
+         } from './api'; 
+         
 function App() {
   const [fixtureData, setFixtureData] = useState<FixtureData[]>([]);
   const [teamData, setTeamData] = useState<TeamData[]>([]);

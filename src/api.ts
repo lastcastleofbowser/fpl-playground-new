@@ -2,7 +2,6 @@ import axios, { AxiosError } from 'axios';
 
 const apiURL = 'http://localhost:3008/api/';
 export const gameweekNum = 5; // Specific gameweek to fetch
-// export const futureGameweeks = 0; // Number of future gameweeks to fetch (0 is all future gameweeks)
 
 export interface FPLGameweekInfo {
   events: {
@@ -18,11 +17,12 @@ export interface FPLGameweekInfo {
 }
 
 export interface FixtureData {
+  id: number,
+  event: number, // Gameweek number
   team_h: number,
   team_a: number,
   team_h_score: number,
   team_a_score: number,
-  id: number,
 }
 
 export interface TeamData {
@@ -62,18 +62,18 @@ export const fetchFixtures = async () => {
       const response = await axios.get(`${apiURL}fixtures/?future=${gameweekNum}`, { timeout: 5000 });
       const fixtures: FixtureData[] = response.data;
 
-      fixtures.sort((a, b) =>  a.id - b.id);
+      fixtures.sort((a, b) =>  a.event - b.event);
 
       const fixturesByGameweek: Record<number, FixtureData[]> = {};
       fixtures.forEach((fixture) => {
-        if (!fixturesByGameweek[fixture.id]) {
-          fixturesByGameweek[fixture.id] = [];
+        if (!fixturesByGameweek[fixture.event]) {
+          fixturesByGameweek[fixture.event] = [];
         }
-        fixturesByGameweek[fixture.id].push(fixture);
+        fixturesByGameweek[fixture.event].push(fixture);
       });
 
       let combinedFixtures: FixtureData[] = [];
-      for (let gameweek = 1; gameweek <= 5; gameweek ++) {
+      for (let gameweek = 1; gameweek <= gameweekNum; gameweek ++) {
         combinedFixtures = combinedFixtures.concat(fixturesByGameweek[gameweek]);
       }
 
@@ -113,8 +113,5 @@ export const fetchFixtures = async () => {
       }
     }
   };
-  
-  
-  
   
   

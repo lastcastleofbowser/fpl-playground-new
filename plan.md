@@ -22,3 +22,6 @@ only the fixtures for each separate gameweek as requested by the user ✅
 8. use colours to indicate the difficulty of each team's game based on FDR
 9. create sorting filters to sort whole fixture table by difficulty in any gameweek by clicking the gameweek number.  
 10. Sort table by team name ascending order when clicking team name header
+11. Add a column to show all your current players beside the fixture ticker next to their relvant team
+    - must take in player id
+    - must pull data from manager API

@@ -24,6 +24,9 @@ export interface FixtureData {
   team_a: number,
   team_h_score: number,
   team_a_score: number,
+  finished: boolean,
+  team_h_difficulty: number,
+  team_a_difficulty: number,
 }
 
 export interface TeamData {

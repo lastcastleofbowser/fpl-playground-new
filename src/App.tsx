@@ -4,11 +4,11 @@ import {  fetchFixtures,
           FixtureData, 
           fetchTeams, 
           TeamData,
-          gameweekNum
-         } from './api'; 
-import { parse } from 'path';
+        } from './api'; 
          
 function App() {
+  const apiURL = 'http://localhost:3008/api/'; 
+
   const [fixtureData, setFixtureData] = useState<FixtureData[]>([]);
   const [teamData, setTeamData] = useState<TeamData[]>([]);
   const [gameweekNum, setGameweekNum] = useState<number>(5);
@@ -19,7 +19,31 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
   setGameweekNum(selectedGameweeks);
  };
 
-  const apiURL = 'http://localhost:3008/api/'; 
+ const getFixtureDifficulty = (strength: number): number => {
+    if (strength >= 0 && strength < 2) {
+    return 1; // Very Easy
+  } else if (strength >= 2 && strength < 3) {
+    return 2; // Easy
+  } else if (strength >= 3 && strength < 4) {
+    return 3; // Neutral
+  } else if (strength >= 4 && strength < 5) {
+    return 4; // Hard
+  } else {
+    return 5; // Very Hard
+  }
+};
+
+ const handleFixtureStrength = (
+  fixture: FixtureData | null,
+ ): number => {
+  if (!fixture) {
+    return 0; // No fixture, return 0 as a default value
+  }
+
+  const { team_h_difficulty = 0, team_a_difficulty = 0 } = fixture;
+  return fixture ? getFixtureDifficulty(team_a_difficulty || team_h_difficulty) : 0;
+};
+
 
   const fetchData = (numGameweeks: number) => {
     setLoading(true);
@@ -89,8 +113,25 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
                 if (!teamFixture && !opponentFixture) {
                   return <td key={gameweek}>BLANK</td>;
                 }
+
+                const strength = handleFixtureStrength(teamFixture || opponentFixture || null);
+
+                // Map the strength to the appropriate CSS class
+                let strengthClass = '';
+                if (strength === 1) {
+                  strengthClass = 'very-easy';
+                } else if (strength === 2) {
+                  strengthClass = 'easy';
+                } else if (strength === 3) {
+                  strengthClass = 'medium';
+                } else if (strength === 4) {
+                  strengthClass = 'hard';
+                } else if (strength === 5) {
+                  strengthClass = 'very-hard';
+                }
+                
                 return (
-                  <td key={gameweek}>
+                  <td key={gameweek} className={strengthClass}>
                     {teamFixture ? `${getTeamName(teamFixture.team_a)} (H)` : ''}
                     {opponentFixture ? `${getTeamName(opponentFixture.team_h)} (A)` : ''}
                   </td>

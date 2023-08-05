@@ -20,3 +20,23 @@
   border: 1px solid #ccc;
   padding:5px;
 }
+
+.very-easy {
+  background-color: green;
+}
+
+.easy {
+  background-color: lightgreen;
+}
+
+.medium {
+  background-color: yellow;
+}
+
+.hard {
+  background-color: orange;
+}
+
+.very-hard {
+  background-color: red;
+}

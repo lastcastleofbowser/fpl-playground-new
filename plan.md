@@ -12,8 +12,7 @@
 
 3. Take the team id and relate them to correct team for display purposes ✅
 4. Display the first 5 fixtures ✅
-5. Have the first column display all team names and get the GW fixtures to display in their own columns
-only the fixtures for each separate gameweek as requested by the user ✅
+5. Have the first column display all team names and get the GW fixtures to display in their own columns for each separate gameweek as requested by the user ✅
    - this will involve changing the URL to match the gameweek ie. /api/fixtures?event=7 will be for GW7
    - NB: /fixtures?future=0 this is all for GWs
    - NB: /fixtures?future=1 will be for 1 upcoming GW -> you can adjust this for x amount of future gameweeks in the fixture tracker
@@ -25,3 +24,4 @@ only the fixtures for each separate gameweek as requested by the user ✅
 11. Add a column to show all your current players beside the fixture ticker next to their relvant team
     - must take in player id
     - must pull data from manager API
+12. turn the fixture into a component from its own file

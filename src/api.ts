@@ -7,7 +7,7 @@ export const gameweekNum = 5; // Specific number of gameweek to fetch
 export interface FPLGameweekInfo {
   events: {
     id: number,
-    name: string,
+    name: string, // Gameweek name
     deadline_time: string,
     average_entry_score: number,
     highest_scoring_entry: number,
@@ -29,7 +29,7 @@ export interface FixtureData {
 export interface TeamData {
   id: number,
   name: string,
-  short_name: string,
+  short_name: string, // eg ARS
   strength_overall_home: number,
   strength_overall_away: number,
   strength_attack_home: number,

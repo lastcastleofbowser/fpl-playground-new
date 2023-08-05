@@ -41,7 +41,7 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 
   const getTeamName = (teamId: number): string => {
     const team = teamData.find((team) => team.id === teamId);
-    return team ? team.name : 'Unknown Team';
+    return team ? team.short_name : 'Unknown Team';
   };
 
   return (
@@ -70,7 +70,7 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
               <tr>
                 <th>Team Name</th>
                 {Array.from({ length: gameweekNum }).map((_, index) => (
-                  <th key={index + 1}>Gameweek {index + 1}</th>
+                  <th key={index + 1}>{index + 1}</th>
                 ))}
               </tr>
             </thead>

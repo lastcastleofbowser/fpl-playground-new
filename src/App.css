@@ -19,22 +19,14 @@
 
 /* ---- FDR COLOURS ---- */
 
-.very-easy {
-  background-color: green;
-}
+.very-easy { background-color: green; }
 
-.easy {
-  background-color: lightgreen;
-}
+.easy { background-color: lightgreen; }
 
-.medium {
-  background-color: yellow;
-}
+.medium { background-color: yellow; }
 
-.hard {
-  background-color: orange;
-}
+.hard { background-color: orange; }
 
-.very-hard {
-  background-color: red;
-}
+.very-hard { background-color: red; }
+
+.blank-gw { background-color: #a19b9b; }

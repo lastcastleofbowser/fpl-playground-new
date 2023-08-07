@@ -7,8 +7,7 @@ import {  fetchFixtures,
         } from './api'; 
          
 function App() {
-  // const apiURL = 'http://localhost:3008/api/'; 
-
+ 
   const [fixtureData, setFixtureData] = useState<FixtureData[]>([]);
   const [teamData, setTeamData] = useState<TeamData[]>([]);
   const [gameweekNum, setGameweekNum] = useState<number>(5);
@@ -103,7 +102,7 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
                   (fixture) => fixture.team_a === team.id && fixture.event === gameweek
                 );
                 if (!teamFixture && !opponentFixture) {
-                  return <td key={gameweek}>BLANK</td>;
+                  return <td key={gameweek} className='blank-gw'></td>;
                 }
 
                 const strength = handleFixtureStrength(teamFixture || opponentFixture || null, team.id);
@@ -124,8 +123,8 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
                 
                 return (
                   <td key={gameweek} className={strengthClass}>
-                    {teamFixture ? `${getTeamName(teamFixture.team_a)} (H)` : ''}
-                    {opponentFixture ? `${getTeamName(opponentFixture.team_h)} (A)` : ''}
+                    {teamFixture ? `${getTeamName(teamFixture.team_a)}` : ''}
+                    {opponentFixture ? `${getTeamName(opponentFixture.team_h).toLowerCase()}` : ''}
                   </td>
                 );
               })}

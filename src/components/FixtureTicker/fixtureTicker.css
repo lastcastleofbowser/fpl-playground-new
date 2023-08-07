@@ -1,6 +1,6 @@
 * { text-align: center; margin: 0.3rem }
 
-/* .fixture-table-container{
+.fixture-table-container{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,7 +18,7 @@
 }
 
 /* ---- FDR COLOURS ---- */
-/* 
+
 .very-easy { background-color: green; }
 
 .easy { background-color: lightgreen; }
@@ -29,4 +29,4 @@
 
 .very-hard { background-color: red; }
 
-.blank-gw { background-color: #a19b9b; }  */
+.blank-gw { background-color: #a19b9b; }

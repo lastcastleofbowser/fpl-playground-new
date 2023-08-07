@@ -3,18 +3,43 @@ import './App.css';
 import {  fetchFixtures, 
           FixtureData, 
           fetchTeams, 
-          TeamData,
-        } from './api';
-         
+          TeamData, } from './api';
 import FixtureTicker from './components/FixtureTicker/fixtureTicker';
          
 function App() {
- 
+  const [fixtureData, setFixtureData] = useState<FixtureData[]>([]);
+  const [teamData, setTeamData] = useState<TeamData[]>([]);
+  const [gameweekNum, setGameweekNum] = useState<number>(5);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const fetchData = (numGameweeks: number) => {
+    setLoading(true);
+    Promise.all([fetchFixtures(numGameweeks), fetchTeams()])
+      .then(([fixtures, teams]) => {
+        setFixtureData(fixtures);
+        setTeamData(teams);
+        console.log('Fixture Data:', fixtures);
+        console.log('Team Data:', teams);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchData(gameweekNum);
+  }, [gameweekNum]);
+
   return (
     <div className="App">
 
-      <FixtureTicker />
-              
+      <FixtureTicker 
+      fixtureData={fixtureData}
+      teamData={teamData}
+      gameweekNum={gameweekNum}
+      loading={loading}
+      setGameweekNum={setGameweekNum}
+      />
     </div>
   );
 }

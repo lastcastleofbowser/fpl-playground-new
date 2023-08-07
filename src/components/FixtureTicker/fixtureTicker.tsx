@@ -1,18 +1,22 @@
-import React, {useState, useEffect} from 'react';
 import './fixtureTicker.css';
-import {  fetchFixtures, 
-          FixtureData, 
-          fetchTeams, 
+import {  FixtureData, 
           TeamData,
         } from '../../api'; 
          
-function FixtureTicker() {
+function FixtureTicker({
+    fixtureData,
+    teamData,
+    gameweekNum,
+    loading,
+    setGameweekNum,
+}: {
+    fixtureData: FixtureData[];
+    teamData: TeamData[];
+    gameweekNum: number;
+    loading: boolean;
+    setGameweekNum: (numGameweeks: number) => void;
+}) {
  
-  const [fixtureData, setFixtureData] = useState<FixtureData[]>([]);
-  const [teamData, setTeamData] = useState<TeamData[]>([]);
-  const [gameweekNum, setGameweekNum] = useState<number>(5);
-  const [loading, setLoading] = useState<boolean>(true);
-  
 const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
   const selectedGameweeks = parseInt(e.target.value);
   setGameweekNum(selectedGameweeks);
@@ -35,25 +39,7 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
   return 0;
 };
 
-  const fetchData = (numGameweeks: number) => {
-    setLoading(true);
-    Promise.all([fetchFixtures(numGameweeks), fetchTeams()])
-      .then(([fixtures, teams]) => {
-        setFixtureData(fixtures);
-        setTeamData(teams);
-        console.log('Fixture Data:', fixtures);
-        console.log('Team Data:', teams);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    fetchData(gameweekNum);
-  }, [gameweekNum]);
-
-  const getTeamName = (teamId: number): string => {
+    const getTeamName = (teamId: number): string => {
     const team = teamData.find((team) => team.id === teamId);
     return team ? team.short_name : 'Unknown Team';
   };

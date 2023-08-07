@@ -7,7 +7,7 @@ import {  fetchFixtures,
         } from './api'; 
          
 function App() {
-  const apiURL = 'http://localhost:3008/api/'; 
+  // const apiURL = 'http://localhost:3008/api/'; 
 
   const [fixtureData, setFixtureData] = useState<FixtureData[]>([]);
   const [teamData, setTeamData] = useState<TeamData[]>([]);
@@ -19,29 +19,21 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
   setGameweekNum(selectedGameweeks);
  };
 
- const getFixtureDifficulty = (strength: number): number => {
-    if (strength >= 0 && strength < 2) {
-    return 1; // Very Easy
-  } else if (strength >= 2 && strength < 3) {
-    return 2; // Easy
-  } else if (strength >= 3 && strength < 4) {
-    return 3; // Neutral
-  } else if (strength >= 4 && strength < 5) {
-    return 4; // Hard
-  } else {
-    return 5; // Very Hard
-  }
-};
-
  const handleFixtureStrength = (
-  fixture: FixtureData | null,
+  fixture: FixtureData | null, teamId: number
  ): number => {
   if (!fixture) {
-    return 0; // No fixture, return 0 as a default value
+    return 0; // No fixture
+  }
+  const { team_h, team_h_difficulty = 0, team_a, team_a_difficulty = 0 } = fixture;
+
+  if (teamId === team_h) {
+    return team_h_difficulty;
+  } else if (teamId === team_a) {
+    return team_a_difficulty;
   }
 
-  const { team_h_difficulty = 0, team_a_difficulty = 0 } = fixture;
-  return fixture ? getFixtureDifficulty(team_a_difficulty || team_h_difficulty) : 0;
+  return 0;
 };
 
 
@@ -114,7 +106,7 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
                   return <td key={gameweek}>BLANK</td>;
                 }
 
-                const strength = handleFixtureStrength(teamFixture || opponentFixture || null);
+                const strength = handleFixtureStrength(teamFixture || opponentFixture || null, team.id);
 
                 // Map the strength to the appropriate CSS class
                 let strengthClass = '';

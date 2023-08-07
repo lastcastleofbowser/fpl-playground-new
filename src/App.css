@@ -12,14 +12,12 @@
   border-collapse: collapse;
 }
 
-.fixture-table thead{
-  /* border-bottom: 10px solid #000; */
-}
-
 .fixture-table td{
   border: 1px solid #ccc;
   padding:5px;
 }
+
+/* ---- FDR COLOURS ---- */
 
 .very-easy {
   background-color: green;

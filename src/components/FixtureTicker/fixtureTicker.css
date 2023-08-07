@@ -30,3 +30,8 @@
 .very-hard { background-color: red; }
 
 .blank-gw { background-color: #a19b9b; }
+
+img{
+  width: 15px;
+  height: 15px;
+}

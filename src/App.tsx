@@ -18,8 +18,6 @@ function App() {
       .then(([fixtures, teams]) => {
         setFixtureData(fixtures);
         setTeamData(teams);
-        console.log('Fixture Data:', fixtures);
-        console.log('Team Data:', teams);
       })
       .finally(() => {
         setLoading(false);

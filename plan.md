@@ -30,5 +30,5 @@
 11. Add a column to show all your current players beside the fixture ticker next to their relvant team
     - must take in player id
     - must pull data from manager API
-12. turn the fixture into a component from its own file
+12. turn the fixture into a component from its own file ✅
 13. When game has been played start gameweeks displaying from next game available

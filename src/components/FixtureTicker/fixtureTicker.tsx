@@ -45,10 +45,10 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
   };
 
   return (
-    <div className="App">
+    <div>
 
       <h1>Premier League Fixtures</h1>
-
+     
       <div>
         <label htmlFor="numGameweeks">Select the number of gameweeks to show: </label>
         <select id="numGameweeks" value={gameweekNum} onChange={handleNumGameweeksChange}>
@@ -68,9 +68,9 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       <table className='fixture-table'>
       <thead>
               <tr>
-                <th>Team Name</th>
+                <th>Team Name ↕️</th>
                 {Array.from({ length: gameweekNum }).map((_, index) => (
-                  <th key={index + 1}>{index + 1}</th>
+                  <th key={index + 1}>{index + 1} ↕️</th>
                 ))}
               </tr>
             </thead>

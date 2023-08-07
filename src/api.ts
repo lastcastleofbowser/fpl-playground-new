@@ -25,8 +25,8 @@ export interface FixtureData {
   team_h_score: number,
   team_a_score: number,
   finished: boolean,
-  team_h_difficulty: number,
-  team_a_difficulty: number,
+  team_h_difficulty: number, //Used in FDR
+  team_a_difficulty: number, //Used in FDR
 }
 
 export interface TeamData {

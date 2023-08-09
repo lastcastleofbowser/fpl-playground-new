@@ -24,8 +24,9 @@
 7. change the names for home games in capitals and away games in lowercase✅
  - HOW ARE YOU GOING TO DISPLAY DGW????
 8. use colours to indicate the difficulty of each team's game based on FDR ✅
-9. create sorting filters to sort whole fixture table by difficulty in any gameweek by clicking sorting icon.
+9. create sorting filters to sort whole fixture table by difficulty in any gameweek by clicking sorting icon.✅
     - sort sorting icon
+    - sorting is confused with home and away FDR information and therefore sorting is displaying incorrectly. It is giving greater difficulty to home games and not factoring in away game difficulty
 10. Sort table by team name ascending order when clicking team name header
 11. Add a column to show all your current players beside the fixture ticker next to their relvant team
     - must take in player id

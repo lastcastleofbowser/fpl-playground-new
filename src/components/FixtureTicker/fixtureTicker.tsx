@@ -2,6 +2,7 @@ import './fixtureTicker.css';
 import {  FixtureData, 
           TeamData,
         } from '../../api'; 
+        import React, { useState } from 'react';
          
 function FixtureTicker({
     fixtureData,
@@ -16,7 +17,16 @@ function FixtureTicker({
     loading: boolean;
     setGameweekNum: (numGameweeks: number) => void;
 }) {
- 
+
+  const [sortTeams, setSortTeams] = useState<number[]>([]); 
+
+  const handleTeamSort = (e: React.MouseEvent<HTMLTableHeaderCellElement>, gameweek: number) => {
+    const columnIndex = gameweek - 1;
+    const newSortOrders = [...sortTeams];
+    newSortOrders[columnIndex] = newSortOrders[columnIndex] === 1 ? -1 : 1;
+    setSortTeams(newSortOrders);
+  };
+
 const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
   const selectedGameweeks = parseInt(e.target.value);
   setGameweekNum(selectedGameweeks);
@@ -70,12 +80,36 @@ const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
               <tr>
                 <th>Team Name ↕️</th>
                 {Array.from({ length: gameweekNum }).map((_, index) => (
-                  <th key={index + 1}>{index + 1} ↕️</th>
+                  <th key={index + 1}
+                  onClick={(e)=>handleTeamSort(e, index + 1)}
+                  >
+                    {index + 1} ↕️</th>
                 ))}
               </tr>
             </thead>
         <tbody>
-          {teamData.map((team) => (
+        {teamData
+                .sort((a, b) => {
+                  let sortValue = 0;
+                  for (let i = 0; i < gameweekNum; i++) {
+                    const gameweek = i + 1;
+                    const aFixture = fixtureData.find(
+                      (fixture) => fixture.team_h === a.id && fixture.event === gameweek
+                    );
+                    const bFixture = fixtureData.find(
+                      (fixture) => fixture.team_h === b.id && fixture.event === gameweek
+                    );
+                    const aStrength = handleFixtureStrength(aFixture || null, a.id);
+                    const bStrength = handleFixtureStrength(bFixture || null, b.id);
+
+                    if (aStrength !== bStrength) {
+                      sortValue = sortTeams[i] * (aStrength - bStrength);
+                      break;
+                    }
+                  }
+                  return sortValue;
+                })
+                  .map((team) => (
             <tr key={team.id}>
               <td>{team.name}</td>
               {Array.from({ length: gameweekNum }).map((_, index) => {

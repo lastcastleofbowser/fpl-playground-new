@@ -6,13 +6,13 @@ To see my current plan as I work through it check out the <a href="https://githu
 See progress photos of how the site developed
 
 1 - setting up the API to grab fixture data
-<img src="./public/screenshots/FPL1.png"></img>
+<img src="./public/screenshots/FPL1.png">
 
 2 - The data was fetched as a monolithic beast without any structure
-<img src="./public/screenshots/FPL2.png"></img>
+<img src="./public/screenshots/FPL2.png">
 
 3 - Laying out the data for each gameweek
-<img src="./public/screenshots/FPL3.png"></img>
+<img src="./public/screenshots/FPL3.png">
 
 4 - Linking the dropdown menu to the gameweek
 <video width="320" height="240" controls>
@@ -20,4 +20,4 @@ See progress photos of how the site developed
 </video>
 
 5 - Setting up the Fixture Difficulty Rating (FDR)
-<img src="./public/screenshots/FPL5.png"></img>
+<img src="./public/screenshots/FPL5.png">

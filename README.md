@@ -1,4 +1,4 @@
-# fpl-playground-new
+# FPL Playground
 FPL side project 
 
 To see my current plan as I work through it check out the <a href="https://github.com/lastcastleofbowser/fpl-playground-new/blob/main/plan.md">plan.md</a> file.

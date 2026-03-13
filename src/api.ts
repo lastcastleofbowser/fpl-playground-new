@@ -43,7 +43,7 @@ export interface TeamData {
 
 export const fetchFPLGameInfo = async () => {
   try {
-    const response = await axios.get(`${apiURL}bootstrap-static`, { timeout: 5000 });
+    const response = await axios.get(`${apiURL}bootstrap-static`, { timeout: 20000 });
     return response.data.events as FPLGameweekInfo[];
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
@@ -62,61 +62,47 @@ export const fetchFPLGameInfo = async () => {
 };
 
 export const fetchFixtures = async (gameweekNum: number) => {
-    try {
-      const response = await axios.get(`${apiURL}fixtures/?future=${gameweekNum}`, { timeout: 5000 });
-      const fixtures: FixtureData[] = response.data;
+  try {
+    const response = await axios.get(`${apiURL}fixtures/?future=${gameweekNum}`, { timeout: 5000 });
+    const fixtures: FixtureData[] = response.data;
+    fixtures.sort((a, b) =>  a.event - b.event);
 
-      fixtures.sort((a, b) =>  a.event - b.event);
+    return fixtures;
 
-      const fixturesByGameweek: Record<number, FixtureData[]> = {};
-      fixtures.forEach((fixture) => {
-        if (!fixturesByGameweek[fixture.event]) {
-          fixturesByGameweek[fixture.event] = [];
-        }
-        fixturesByGameweek[fixture.event].push(fixture);
-      });
-
-      let combinedFixtures: FixtureData[] = [];
-      for (let gameweek = 1; gameweek <= gameweekNum; gameweek ++) {
-        combinedFixtures = combinedFixtures.concat(fixturesByGameweek[gameweek]);
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        throw new Error(`Error fetching fixture data: ${axiosError.response.statusText}`);
+      } else if (axiosError.request) { 
+        throw new Error('Error fetching fixture data: Request did not receive a response');
+      } else { 
+        throw new Error(`Error fetching fixture data: ${axiosError.message}`);
       }
-
-      return combinedFixtures;
-
-    } catch (error: any) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        if (axiosError.response) {
-          throw new Error(`Error fetching fixture data: ${axiosError.response.statusText}`);
-        } else if (axiosError.request) { 
-          throw new Error('Error fetching fixture data: Request did not receive a response');
-        } else { 
-          throw new Error(`Error fetching fixture data: ${axiosError.message}`);
-        }
-      } else {
-        throw error;
-      }
+    } else {
+      throw error;
     }
-  };
+  }
+};
 
-  export const fetchTeams = async () => {
-    try {
-      const response = await axios.get(`${apiURL}bootstrap-static`, { timeout: 5000 });
-      return response.data.teams as TeamData[];
-    } catch (error: any) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        if (axiosError.response) {
-          throw new Error(`Error fetching fixture data: ${axiosError.response.statusText}`);
-        } else if (axiosError.request) { 
-          throw new Error('Error fetching fixture data: Request did not receive a response');
-        } else { 
-          throw new Error(`Error fetching fixture data: ${axiosError.message}`);
-        }
-      } else {
-        throw error;
+export const fetchTeams = async () => {
+  try {
+    const response = await axios.get(`${apiURL}bootstrap-static`, { timeout: 5000 });
+    return response.data.teams as TeamData[];
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        throw new Error(`Error fetching fixture data: ${axiosError.response.statusText}`);
+      } else if (axiosError.request) { 
+        throw new Error('Error fetching fixture data: Request did not receive a response');
+      } else { 
+        throw new Error(`Error fetching fixture data: ${axiosError.message}`);
       }
+    } else {
+      throw error;
     }
-  };
+  }
+};
   
   

@@ -1,6 +1,16 @@
-import './fixtureTicker.css';
+import React, { useState, useMemo } from 'react';
 import { FixtureData, TeamData } from '../../api';
-import React, { useState } from 'react';
+import { handleFixturesByGw } from '../../utils/handleFixturesByGw';
+import { handleFixtureStrength } from '../../utils/handleFixtureStrength';
+import './fixtureTicker.css';
+
+interface FixtureTickerProps {
+  fixtureData: FixtureData[];
+  teamData: TeamData[];
+  gameweekNum: number;
+  loading: boolean;
+  setGameweekNum: (numGameweeks: number) => void;
+}
 
 function FixtureTicker({
   fixtureData,
@@ -8,17 +18,42 @@ function FixtureTicker({
   gameweekNum,
   loading,
   setGameweekNum,
-}: {
-  fixtureData: FixtureData[];
-  teamData: TeamData[];
-  gameweekNum: number;
-  loading: boolean;
-  setGameweekNum: (numGameweeks: number) => void;
-}) {
+}: FixtureTickerProps) {
   const [selectedGameweek, setSelectedGameweek] = useState(gameweekNum);
-  const [sortOrder, setSortOrder] = useState<number[]>(Array.from({ length: gameweekNum }, () => 1));
+  const [sortOrder, setSortOrder] = useState<number[]>(
+    Array.from({ length: gameweekNum }, () => 1)
+  );
 
-  const handleTeamSort = (e: React.MouseEvent<HTMLTableHeaderCellElement>, gameweek: number) => {
+  // Precompute grouped fixtures by gameweek
+  const fixturesByGw = useMemo(() => handleFixturesByGw(fixtureData), [fixtureData]);
+
+  // Get the sorted list of all gw numbers
+  const gwNumbers = useMemo(() => {
+    return Object.keys(fixturesByGw)
+      .map((k) => parseInt(k))
+      .sort((a, b) => a - b);  
+  }, [fixturesByGw]);
+
+  // Last event in fixture list
+  const lastEvent = useMemo(() => {
+    if (fixtureData.length === 0) return 0;
+    return Math.max(...fixtureData.map(f => f.event));
+  }, [fixtureData]);
+  
+  // Limit columns to not exceed actual fixtures
+  const maxColumns = Math.min(gameweekNum, lastEvent);
+
+  // Teams lookup map
+  const teamMap = useMemo(
+    () => Object.fromEntries(teamData.map((team) => [team.id, team])),
+    [teamData]
+  );
+
+  const getTeamShortName = (teamId: number | null) =>
+  teamId && teamMap[teamId] ? teamMap[teamId].short_name : 'Unknown';
+
+  // Handle sorting by gameweek
+  const handleTeamSort = (gameweek: number) => {
     const columnIndex = gameweek - 1;
     const newSortOrder = [...sortOrder];
     newSortOrder[columnIndex] = newSortOrder[columnIndex] === 1 ? -1 : 1;
@@ -26,31 +61,12 @@ function FixtureTicker({
     setSelectedGameweek(gameweek);
   };
 
+  // Handle user changing number of gameweeks to display
   const handleNumGameweeksChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedGameweeks = parseInt(e.target.value);
     setGameweekNum(selectedGameweeks);
     setSelectedGameweek(selectedGameweeks);
     setSortOrder(Array.from({ length: selectedGameweeks }, () => 1));
-  };
-
-  const handleFixtureStrength = (fixture: FixtureData | null, teamId: number): number => {
-    if (!fixture) {
-      return 0; // No fixture
-    }
-    const { team_h, team_h_difficulty = 0, team_a, team_a_difficulty = 0 } = fixture;
-
-    if (teamId === team_h) {
-      return team_h_difficulty;
-    } else if (teamId === team_a) {
-      return team_a_difficulty;
-    }
-
-    return 0;
-  };
-
-  const getTeamName = (teamId: number): string => {
-    const team = teamData.find((team) => team.id === teamId);
-    return team ? team.short_name : 'Unknown Team';
   };
 
   return (
@@ -60,13 +76,18 @@ function FixtureTicker({
       <div>
         <label htmlFor="numGameweeks">Select the number of gameweeks to show: </label>
         <select id="numGameweeks" value={gameweekNum} onChange={handleNumGameweeksChange}>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-          <option value="38">all</option>
+          {[5, 6, 7, 8, 9, 10]
+            .filter((gw) => gw <= lastEvent) // remove options beyond lastEvent
+            .map((gw) => (
+              <option key={gw} value={gw}>
+                {gw}
+              </option>
+            ))}
+          {lastEvent > 10 && (
+            <option key="all" value={lastEvent}>
+              All
+            </option>
+          )}
         </select>
       </div>
 
@@ -76,72 +97,61 @@ function FixtureTicker({
             <thead>
               <tr>
                 <th>Team Name ↕️</th>
-                {Array.from({ length: gameweekNum }).map((_, index) => (
-                  <th
-                    key={index + 1}
-                    onClick={(e) => handleTeamSort(e, index + 1)}
-                    className={selectedGameweek === index + 1 ? 'sorted' : ''}
-                  >
-                    {index + 1} {sortOrder[index] === 1? '⬆️' : '⬇️'}
-                  </th>
-                ))}
+                {gwNumbers.slice(0, maxColumns).map((gw) => (
+                <th
+                  key={gw}
+                  onClick={() => handleTeamSort(gw)}
+                  className={selectedGameweek === gw ? 'sorted' : ''}
+                >
+                  {gw} {sortOrder[gw] === 1 ? '⬆️' : '⬇️'}
+                </th>
+              ))}
               </tr>
             </thead>
             <tbody>
-              {teamData
+              {[...teamData]
                 .sort((a, b) => {
-                  let sortValue = 0;
-                  const gameweek = selectedGameweek;
-                  const aFixture = fixtureData.find(
-                    (fixture) => fixture.team_h === a.id && fixture.event === gameweek
+                  const gw = selectedGameweek;
+                  const aFixture = fixturesByGw[gw]?.find(
+                    (f) => f.team_h === a.id || f.team_a === a.id
                   );
-                  const bFixture = fixtureData.find(
-                    (fixture) => fixture.team_h === b.id && fixture.event === gameweek
+                  const bFixture = fixturesByGw[gw]?.find(
+                    (f) => f.team_h === b.id || f.team_a === b.id
                   );
-                  const aStrength = handleFixtureStrength(aFixture || null, a.id);
-                  const bStrength = handleFixtureStrength(bFixture || null, b.id);
 
-                  if (aStrength !== bStrength) {
-                    sortValue = sortOrder[selectedGameweek - 1] * (aStrength - bStrength);
-                  }
+                  const aStrength = aFixture ? handleFixtureStrength(aFixture, a.id) : 0;
+                  const bStrength = bFixture ? handleFixtureStrength(bFixture, b.id) : 0;
 
-                  return sortValue;
+                  return sortOrder[selectedGameweek - 1] * (aStrength - bStrength);
                 })
                 .map((team) => (
                   <tr key={team.id}>
                     <td>{team.name}</td>
-                    {Array.from({ length: gameweekNum }).map((_, index) => {
-                      const gameweek = index + 1;
-                      const teamFixture = fixtureData.find(
-                        (fixture) => fixture.team_h === team.id && fixture.event === gameweek
+                    {gwNumbers.slice(0, maxColumns).map((_, idx) => {
+                      const gw = gwNumbers[idx];
+                      const fixturesForGw = fixturesByGw[gw] || [];
+                      const fixture = fixturesForGw.find(
+                        (f) => f.team_h === team.id || f.team_a === team.id
                       );
-                      const opponentFixture = fixtureData.find(
-                        (fixture) => fixture.team_a === team.id && fixture.event === gameweek
-                      );
-                      if (!teamFixture && !opponentFixture) {
-                        return <td key={gameweek} className="blank-gw"></td>;
+
+                      if (!fixture) {
+                        return <td key={gw} className="blank-gw"></td>;
                       }
 
-                      const strength = handleFixtureStrength(teamFixture || opponentFixture || null, team.id);
+                      const opponentId = fixture.team_h === team.id ? fixture.team_a : fixture.team_h;
+                      const opponentName = getTeamShortName(opponentId);
 
-                      // Map the strength to the appropriate CSS class
+                      const strength = handleFixtureStrength(fixture, team.id);
                       let strengthClass = '';
-                      if (strength === 1) {
-                        strengthClass = 'very-easy';
-                      } else if (strength === 2) {
-                        strengthClass = 'easy';
-                      } else if (strength === 3) {
-                        strengthClass = 'medium';
-                      } else if (strength === 4) {
-                        strengthClass = 'hard';
-                      } else if (strength === 5) {
-                        strengthClass = 'very-hard';
-                      }
+                      if (strength === 1) strengthClass = 'very-easy';
+                      else if (strength === 2) strengthClass = 'easy';
+                      else if (strength === 3) strengthClass = 'medium';
+                      else if (strength === 4) strengthClass = 'hard';
+                      else if (strength === 5) strengthClass = 'very-hard';
 
                       return (
-                        <td key={gameweek} className={strengthClass}>
-                          {teamFixture ? `${getTeamName(teamFixture.team_a)}` : ''}
-                          {opponentFixture ? `${getTeamName(opponentFixture.team_h).toLowerCase()}` : ''}
+                        <td key={gw} className={strengthClass}>
+                          {opponentName}
                         </td>
                       );
                     })}

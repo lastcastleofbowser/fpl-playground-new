@@ -7,7 +7,7 @@ import {  fetchFixtures,
 import FixtureTicker from './components/FixtureTicker/fixtureTicker';
          
 function App() {
-  const [fixtureData, setFixtureData] = useState<FixtureData[]>([]);
+  const [fixtureData, setFixtureData] = useState<FixtureData[]>([])
   const [teamData, setTeamData] = useState<TeamData[]>([]);
   const [gameweekNum, setGameweekNum] = useState<number>(5);
   const [loading, setLoading] = useState<boolean>(true);
@@ -22,8 +22,8 @@ function App() {
       .finally(() => {
         setLoading(false);
       });
-  };
-
+    };
+    
   useEffect(() => {
     fetchData(gameweekNum);
   }, [gameweekNum]);

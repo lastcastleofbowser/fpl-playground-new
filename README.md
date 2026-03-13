@@ -1,6 +1,12 @@
 # FPL Playground
 FPL side project 
 
+# To start
+1. 'git clone' -  clone the repo locally
+2. 'npm i' - install dependencies
+3. 'npm start' start server
+4. In a separate terminal, navigate to server folder and start proxy server with 'node server.js'
+
 To see my current plan as I work through it check out the <a href="https://github.com/lastcastleofbowser/fpl-playground-new/blob/main/plan.md">plan.md</a> file.
 
 See progress photos of how the site developed

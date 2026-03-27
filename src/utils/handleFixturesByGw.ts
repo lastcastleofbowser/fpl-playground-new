@@ -1,4 +1,4 @@
-import { FixtureData } from "../api";
+import { FixtureData } from "../interfaces/api_interfaces";
 
 export const handleFixturesByGw = (
   fixtureData: FixtureData[]

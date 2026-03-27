@@ -1,4 +1,4 @@
-import { FixtureData } from "../api";
+import { FixtureData } from "../interfaces/api_interfaces";
 
 export const handleFixtureStrength = (
   fixture: FixtureData | null, teamId: number

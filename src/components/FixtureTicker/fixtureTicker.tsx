@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { FixtureData, TeamData } from '../../api';
+import { FixtureData, TeamData } from '../../interfaces/api_interfaces';
 import { handleFixturesByGw } from '../../utils/handleFixturesByGw';
 import { handleFixtureStrength } from '../../utils/handleFixtureStrength';
 import './fixtureTicker.css';
@@ -70,11 +70,9 @@ function FixtureTicker({
   };
 
   return (
-    <div>
-      <h1>Premier League Fixtures</h1>
-
+    <div className='mx-3'>
       <div>
-        <label htmlFor="numGameweeks">Select the number of gameweeks to show: </label>
+        <label htmlFor="numGameweeks">Num of GWs: </label>
         <select id="numGameweeks" value={gameweekNum} onChange={handleNumGameweeksChange}>
           {[5, 6, 7, 8, 9, 10]
             .filter((gw) => gw <= lastEvent) // remove options beyond lastEvent
